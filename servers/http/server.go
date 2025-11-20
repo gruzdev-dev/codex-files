@@ -31,6 +31,18 @@ func NewServer(cfg *configs.Config, handler *http.Handler) *Server {
 func (s *Server) Start() error {
 	router := mux.NewRouter()
 	router.Use(middleware.Logging())
+	
+	// Health check endpoints for Kubernetes
+	router.HandleFunc("/healthz", func(w nethttp.ResponseWriter, r *nethttp.Request) {
+		w.WriteHeader(nethttp.StatusOK)
+		w.Write([]byte("OK"))
+	}).Methods("GET")
+	
+	router.HandleFunc("/readyz", func(w nethttp.ResponseWriter, r *nethttp.Request) {
+		w.WriteHeader(nethttp.StatusOK)
+		w.Write([]byte("OK"))
+	}).Methods("GET")
+	
 	s.handler.RegisterRoutes(router)
 
 	srv := &nethttp.Server{
