@@ -1,4 +1,4 @@
-FROM golang:1.22-alpine AS builder
+FROM golang:1.25-alpine AS builder
 
 WORKDIR /app
 
@@ -9,16 +9,15 @@ RUN go mod download
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o main .
+RUN CGO_ENABLED=0 GOOS=linux go build -o main ./cmd/app
+RUN CGO_ENABLED=0 GOOS=linux go build -o migrator ./cmd/migrator
 
 FROM alpine:latest AS app
 
 WORKDIR /app
 
 COPY --from=builder /app/main .
-COPY --from=builder /app/config.yaml .
-
-EXPOSE 8082
+COPY --from=builder /app/migrator .
 
 CMD ["./main"]
 

@@ -1,0 +1,12 @@
+FROM golang:1.25
+
+RUN go install github.com/go-gremlins/gremlins/cmd/gremlins@latest
+
+WORKDIR /app
+
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY . .
+
+ENTRYPOINT ["gremlins", "unleash", "--config=tests/gremlins.yaml"]

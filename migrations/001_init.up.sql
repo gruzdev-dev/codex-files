@@ -1,0 +1,2 @@
+-- Initial migration for codex-files service
+-- This file can be populated with actual schema when needed

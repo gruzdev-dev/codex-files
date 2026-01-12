@@ -1,0 +1,15 @@
+
+version: "2"
+
+linters:
+  default: standard
+
+formatters:
+
+issues:
+
+output:
+
+run:
+
+severity:

@@ -1,7 +1,7 @@
 package http
 
 import (
-	"codex-files/adapters/http"
+	httpAdapter "codex-files/adapters/http"
 	"codex-files/configs"
 	middleware "codex-files/middleware/http"
 	"context"
@@ -18,10 +18,10 @@ import (
 
 type Server struct {
 	cfg     *configs.Config
-	handler *http.Handler
+	handler *httpAdapter.Handler
 }
 
-func NewServer(cfg *configs.Config, handler *http.Handler) *Server {
+func NewServer(cfg *configs.Config, handler *httpAdapter.Handler) *Server {
 	return &Server{
 		cfg:     cfg,
 		handler: handler,
@@ -31,28 +31,31 @@ func NewServer(cfg *configs.Config, handler *http.Handler) *Server {
 func (s *Server) Start() error {
 	router := mux.NewRouter()
 	router.Use(middleware.Logging())
-	
+
+	authMiddleware := httpAdapter.NewAuthMiddleware(s.cfg.Auth.JWTSecret)
+	router.Use(authMiddleware.Handler)
+
 	// Health check endpoints for Kubernetes
 	router.HandleFunc("/healthz", func(w nethttp.ResponseWriter, r *nethttp.Request) {
 		w.WriteHeader(nethttp.StatusOK)
-		w.Write([]byte("OK"))
+		_, _ = w.Write([]byte("OK"))
 	}).Methods("GET")
-	
+
 	router.HandleFunc("/readyz", func(w nethttp.ResponseWriter, r *nethttp.Request) {
 		w.WriteHeader(nethttp.StatusOK)
-		w.Write([]byte("OK"))
+		_, _ = w.Write([]byte("OK"))
 	}).Methods("GET")
-	
+
 	s.handler.RegisterRoutes(router)
 
 	srv := &nethttp.Server{
-		Addr:    ":" + s.cfg.Server.Port,
+		Addr:    ":" + s.cfg.HTTP.Port,
 		Handler: router,
 	}
 
 	serverErrors := make(chan error, 1)
 	go func() {
-		log.Printf("Starting server on port %s", s.cfg.Server.Port)
+		log.Printf("Starting server on port %s", s.cfg.HTTP.Port)
 		serverErrors <- srv.ListenAndServe()
 	}()
 
