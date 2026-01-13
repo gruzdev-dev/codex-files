@@ -32,9 +32,6 @@ func (s *Server) Start() error {
 	router := mux.NewRouter()
 	router.Use(middleware.Logging())
 
-	authMiddleware := httpAdapter.NewAuthMiddleware(s.cfg.Auth.JWTSecret)
-	router.Use(authMiddleware.Handler)
-
 	router.HandleFunc("/healthz", func(w nethttp.ResponseWriter, r *nethttp.Request) {
 		w.WriteHeader(nethttp.StatusOK)
 		_, _ = w.Write([]byte("OK"))
@@ -45,7 +42,8 @@ func (s *Server) Start() error {
 		_, _ = w.Write([]byte("OK"))
 	}).Methods("GET")
 
-	s.handler.RegisterRoutes(router)
+	api := router.PathPrefix("/api/v1").Subrouter()
+	s.handler.RegisterRoutes(api)
 
 	srv := &nethttp.Server{
 		Addr:    ":" + s.cfg.HTTP.Port,

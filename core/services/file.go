@@ -5,6 +5,7 @@ import (
 	"codex-files/core/ports"
 	"context"
 	"fmt"
+	"log"
 	"slices"
 	"time"
 )
@@ -135,4 +136,33 @@ func (s *FileService) hasAccess(file *domain.File, userID string, scopes []strin
 
 	requiredScope := fmt.Sprintf("file:%s:read", file.ID)
 	return slices.Contains(scopes, requiredScope)
+}
+
+func (s *FileService) ConfirmUpload(ctx context.Context, fileID string) error {
+	if fileID == "" {
+		return fmt.Errorf("%w: file ID is required", domain.ErrFileIDRequired)
+	}
+
+	file, err := s.repo.GetByID(ctx, fileID)
+	if err != nil {
+		if err == domain.ErrFileNotFound {
+			log.Printf("webhook: file not found: %s", fileID)
+			return nil
+		}
+		return fmt.Errorf("failed to get file: %w", err)
+	}
+
+	if file.Status == domain.FileStatusUploaded {
+		return nil
+	}
+
+	if file.Status == domain.FileStatusPending {
+		file.MarkAsUploaded()
+		_, err := s.repo.Update(ctx, file)
+		if err != nil {
+			return fmt.Errorf("failed to update file status: %w", err)
+		}
+	}
+
+	return nil
 }

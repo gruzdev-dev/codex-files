@@ -26,12 +26,13 @@ type Config struct {
 		Database string
 	}
 	S3 struct {
-		Endpoint     string
-		AccessKey    string
-		SecretKey    string
-		Bucket       string
-		ExternalHost string
-		UseSSL       bool
+		Endpoint      string
+		AccessKey     string
+		SecretKey     string
+		Bucket        string
+		ExternalHost  string
+		UseSSL        bool
+		WebhookSecret string
 	}
 	Upload struct {
 		MaxSize int64
@@ -105,6 +106,10 @@ func NewConfig() (*Config, error) {
 
 	if envS3UseSSL := os.Getenv("S3_USE_SSL"); envS3UseSSL != "" {
 		cfg.S3.UseSSL = envS3UseSSL == "true"
+	}
+
+	if envS3WebhookSecret := os.Getenv("S3_WEBHOOK_SECRET"); envS3WebhookSecret != "" {
+		cfg.S3.WebhookSecret = envS3WebhookSecret
 	}
 
 	if envUploadMaxSize := os.Getenv("UPLOAD_MAX_SIZE"); envUploadMaxSize != "" {

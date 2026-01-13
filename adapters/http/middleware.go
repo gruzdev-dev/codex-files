@@ -6,6 +6,7 @@ import (
 
 	"codex-files/core/domain"
 	"codex-files/pkg/identity"
+
 	"github.com/golang-jwt/jwt/v5"
 )
 
@@ -68,4 +69,31 @@ func parseScopes(raw interface{}) []string {
 		return res
 	}
 	return nil
+}
+
+type WebhookAuthMiddleware struct {
+	secret string
+}
+
+func NewWebhookAuthMiddleware(secret string) *WebhookAuthMiddleware {
+	return &WebhookAuthMiddleware{secret: secret}
+}
+
+func (m *WebhookAuthMiddleware) Handler(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var providedSecret string
+
+		if secret := r.Header.Get("X-Codex-Webhook-Secret"); secret != "" {
+			providedSecret = secret
+		} else if secret := r.URL.Query().Get("secret"); secret != "" {
+			providedSecret = secret
+		}
+
+		if providedSecret == "" || providedSecret != m.secret {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
 }

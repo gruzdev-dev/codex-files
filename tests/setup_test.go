@@ -200,10 +200,8 @@ func SetupTestEnv(t *testing.T) *TestEnv {
 
 	router := mux.NewRouter()
 
-	authMiddleware := httpAdapter.NewAuthMiddleware(cfg.Auth.JWTSecret)
-	router.Use(authMiddleware.Handler)
-
-	httpHandler.RegisterRoutes(router)
+	api := router.PathPrefix("/api/v1").Subrouter()
+	httpHandler.RegisterRoutes(api)
 
 	ts := httptest.NewServer(router)
 
