@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "codex-files/api/proto";
+
+service FilesService {
+  rpc GenerateUploadUrl(GenerateUploadUrlRequest) returns (GenerateUploadUrlResponse);
+  rpc DeleteFile(DeleteFileRequest) returns (DeleteFileResponse);
+}
+
+message GenerateUploadUrlRequest {
+  string user_id = 1;
+  string content_type = 2;
+  int64 size = 3;
+}
+
+message GenerateUploadUrlResponse {
+  string file_id = 1;
+  string upload_url = 2;
+}
+
+message DeleteFileRequest {
+  string file_id = 1;
+}
+
+message DeleteFileResponse {}

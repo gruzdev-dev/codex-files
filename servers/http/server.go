@@ -35,7 +35,6 @@ func (s *Server) Start() error {
 	authMiddleware := httpAdapter.NewAuthMiddleware(s.cfg.Auth.JWTSecret)
 	router.Use(authMiddleware.Handler)
 
-	// Health check endpoints for Kubernetes
 	router.HandleFunc("/healthz", func(w nethttp.ResponseWriter, r *nethttp.Request) {
 		w.WriteHeader(nethttp.StatusOK)
 		_, _ = w.Write([]byte("OK"))

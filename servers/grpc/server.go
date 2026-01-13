@@ -2,6 +2,7 @@ package grpc
 
 import (
 	grpcAdapter "codex-files/adapters/grpc"
+	"codex-files/api/proto"
 	"codex-files/configs"
 	"context"
 	"fmt"
@@ -15,12 +16,13 @@ type Server struct {
 	grpcServer *grpc.Server
 }
 
-func NewServer(cfg *configs.Config) *Server {
+func NewServer(cfg *configs.Config, handler *grpcAdapter.FilesHandler) *Server {
 	opts := []grpc.ServerOption{
 		grpc.UnaryInterceptor(grpcAdapter.AuthInterceptor(cfg.Auth.InternalSecret)),
 	}
 
 	s := grpc.NewServer(opts...)
+	proto.RegisterFilesServiceServer(s, handler)
 
 	return &Server{
 		cfg:        cfg,

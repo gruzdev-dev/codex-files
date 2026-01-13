@@ -3,6 +3,8 @@ package configs
 import (
 	"fmt"
 	"os"
+	"strconv"
+	"time"
 )
 
 type Config struct {
@@ -22,6 +24,21 @@ type Config struct {
 		User     string
 		Password string
 		Database string
+	}
+	S3 struct {
+		Endpoint     string
+		AccessKey    string
+		SecretKey    string
+		Bucket       string
+		ExternalHost string
+		UseSSL       bool
+	}
+	Upload struct {
+		MaxSize int64
+		TTL     time.Duration
+	}
+	Download struct {
+		TTL time.Duration
 	}
 }
 
@@ -64,6 +81,54 @@ func NewConfig() (*Config, error) {
 
 	if envDBDatabase := os.Getenv("POSTGRES_DB"); envDBDatabase != "" {
 		cfg.DB.Database = envDBDatabase
+	}
+
+	if envS3Endpoint := os.Getenv("S3_ENDPOINT"); envS3Endpoint != "" {
+		cfg.S3.Endpoint = envS3Endpoint
+	}
+
+	if envS3AccessKey := os.Getenv("S3_ACCESS_KEY"); envS3AccessKey != "" {
+		cfg.S3.AccessKey = envS3AccessKey
+	}
+
+	if envS3SecretKey := os.Getenv("S3_SECRET_KEY"); envS3SecretKey != "" {
+		cfg.S3.SecretKey = envS3SecretKey
+	}
+
+	if envS3Bucket := os.Getenv("S3_BUCKET"); envS3Bucket != "" {
+		cfg.S3.Bucket = envS3Bucket
+	}
+
+	if envS3ExternalHost := os.Getenv("S3_EXTERNAL_HOST"); envS3ExternalHost != "" {
+		cfg.S3.ExternalHost = envS3ExternalHost
+	}
+
+	if envS3UseSSL := os.Getenv("S3_USE_SSL"); envS3UseSSL != "" {
+		cfg.S3.UseSSL = envS3UseSSL == "true"
+	}
+
+	if envUploadMaxSize := os.Getenv("UPLOAD_MAX_SIZE"); envUploadMaxSize != "" {
+		if size, err := strconv.ParseInt(envUploadMaxSize, 10, 64); err == nil {
+			cfg.Upload.MaxSize = size
+		}
+	} else {
+		cfg.Upload.MaxSize = 100 * 1024 * 1024
+	}
+
+	if envUploadTTL := os.Getenv("UPLOAD_TTL"); envUploadTTL != "" {
+		if ttl, err := time.ParseDuration(envUploadTTL); err == nil {
+			cfg.Upload.TTL = ttl
+		}
+	} else {
+		cfg.Upload.TTL = 5 * time.Minute
+	}
+
+	if envDownloadTTL := os.Getenv("DOWNLOAD_TTL"); envDownloadTTL != "" {
+		if ttl, err := time.ParseDuration(envDownloadTTL); err == nil {
+			cfg.Download.TTL = ttl
+		}
+	} else {
+		cfg.Download.TTL = 15 * time.Minute
 	}
 
 	return &cfg, nil

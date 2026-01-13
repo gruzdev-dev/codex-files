@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"strings"
 
+	"codex-files/core/domain"
+	"codex-files/pkg/identity"
 	"github.com/golang-jwt/jwt/v5"
 )
 
@@ -39,7 +41,31 @@ func (m *AuthMiddleware) Handler(next http.Handler) http.Handler {
 			return
 		}
 
-		_ = claims
-		next.ServeHTTP(w, r)
+		id := domain.Identity{
+			UserID: getClaim(claims, "sub"),
+			Scopes: parseScopes(claims["scope"]),
+		}
+
+		ctx := identity.WithCtx(r.Context(), id)
+		next.ServeHTTP(w, r.WithContext(ctx))
 	})
+}
+
+func getClaim(claims jwt.MapClaims, key string) string {
+	val, _ := claims[key].(string)
+	return val
+}
+
+func parseScopes(raw interface{}) []string {
+	if s, ok := raw.(string); ok {
+		return strings.Split(s, " ")
+	}
+	if slice, ok := raw.([]interface{}); ok {
+		res := make([]string, len(slice))
+		for i, v := range slice {
+			res[i], _ = v.(string)
+		}
+		return res
+	}
+	return nil
 }
