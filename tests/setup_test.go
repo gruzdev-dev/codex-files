@@ -109,6 +109,7 @@ func SetupTestEnv(t *testing.T) *TestEnv {
 	os.Setenv("S3_BUCKET", "test-bucket")
 	os.Setenv("S3_EXTERNAL_HOST", "s3.test.local")
 	os.Setenv("S3_USE_SSL", "false")
+	os.Setenv("S3_WEBHOOK_SECRET", "test-webhook-secret")
 	os.Setenv("UPLOAD_MAX_SIZE", "104857600")
 	os.Setenv("UPLOAD_TTL", "5m")
 	os.Setenv("DOWNLOAD_TTL", "15m")

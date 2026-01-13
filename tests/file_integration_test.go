@@ -3,7 +3,9 @@
 package tests
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"net/http"
 	"testing"
 	"time"
@@ -167,7 +169,77 @@ func TestFileIntegration(t *testing.T) {
 		t.Logf("Download URL: %s", downloadURL)
 	})
 
-	t.Run("Step 5: Verify download URL access (simulated)", func(t *testing.T) {
+	t.Run("Step 5: Simulate S3 webhook notification", func(t *testing.T) {
+		require.NotEmpty(t, fileID, "File ID should be set from previous step")
+
+		s3Path := testUserID + "/" + fileID
+		webhookPayload := map[string]interface{}{
+			"Records": []map[string]interface{}{
+				{
+					"eventVersion": "2.0",
+					"eventSource":  "minio:s3",
+					"awsRegion":    "",
+					"eventTime":    time.Now().Format(time.RFC3339),
+					"eventName":    "s3:ObjectCreated:Put",
+					"userIdentity": map[string]interface{}{
+						"principalId": "minio",
+					},
+					"requestParameters": map[string]string{
+						"sourceIPAddress": "127.0.0.1",
+					},
+					"responseElements": map[string]string{
+						"x-amz-request-id": "test-request-id",
+					},
+					"s3": map[string]interface{}{
+						"s3SchemaVersion": "1.0",
+						"configurationId": "test-config",
+						"bucket": map[string]interface{}{
+							"name":          "test-bucket",
+							"ownerIdentity": map[string]interface{}{"principalId": "minio"},
+							"arn":           "arn:aws:s3:::test-bucket",
+						},
+						"object": map[string]interface{}{
+							"key":       s3Path,
+							"size":      testFileSize,
+							"eTag":      "test-etag",
+							"sequencer": "test-sequencer",
+						},
+					},
+					"source": map[string]interface{}{
+						"host":      "127.0.0.1",
+						"port":      "9000",
+						"userAgent": "MinIO",
+					},
+				},
+			},
+		}
+
+		payloadBytes, err := json.Marshal(webhookPayload)
+		require.NoError(t, err)
+
+		req, err := http.NewRequest("POST", env.ServerURL+"/api/v1/webhook/s3", bytes.NewReader(payloadBytes))
+		require.NoError(t, err)
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("X-Codex-Webhook-Secret", "test-webhook-secret")
+
+		resp, err := client.Do(req)
+		require.NoError(t, err)
+		defer resp.Body.Close()
+
+		assert.Equal(t, http.StatusOK, resp.StatusCode, "Webhook should return 200 OK")
+
+		ctx := context.Background()
+		file, err := getFileFromDB(ctx, env.DB, fileID)
+		require.NoError(t, err)
+		require.NotNil(t, file)
+
+		assert.Equal(t, domain.FileStatusUploaded, file.Status, "File status should be updated to uploaded")
+		assert.Equal(t, fileID, file.ID)
+
+		t.Logf("Webhook notification processed successfully, file status updated to: %s", file.Status)
+	})
+
+	t.Run("Step 6: Verify download URL access (simulated)", func(t *testing.T) {
 		require.NotEmpty(t, downloadURL, "Download URL should be set from previous step")
 
 		req, err := http.NewRequest("GET", downloadURL, nil)
@@ -183,7 +255,7 @@ func TestFileIntegration(t *testing.T) {
 		t.Logf("Download access simulated (S3 is mocked, so actual download would fail)")
 	})
 
-	t.Run("Step 6: Delete file via gRPC", func(t *testing.T) {
+	t.Run("Step 7: Delete file via gRPC", func(t *testing.T) {
 		require.NotEmpty(t, fileID, "File ID should be set from previous step")
 
 		md := metadata.Pairs("x-internal-token", "test-internal-secret")
@@ -212,7 +284,7 @@ func TestFileIntegration(t *testing.T) {
 		t.Logf("File soft-delete verified: IsDeleted=%v", file.IsDeleted)
 	})
 
-	t.Run("Step 8: Verify file is not accessible after deletion", func(t *testing.T) {
+	t.Run("Step 9: Verify file is not accessible after deletion", func(t *testing.T) {
 		require.NotEmpty(t, fileID, "File ID should be set from previous step")
 
 		token, err := createTestJWTToken("test-secret", testUserID, []string{})
