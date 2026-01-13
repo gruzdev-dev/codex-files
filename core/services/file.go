@@ -5,6 +5,7 @@ import (
 	"codex-files/core/ports"
 	"context"
 	"fmt"
+	"slices"
 	"time"
 )
 
@@ -133,11 +134,5 @@ func (s *FileService) hasAccess(file *domain.File, userID string, scopes []strin
 	}
 
 	requiredScope := fmt.Sprintf("file:%s:read", file.ID)
-	for _, scope := range scopes {
-		if scope == requiredScope {
-			return true
-		}
-	}
-
-	return false
+	return slices.Contains(scopes, requiredScope)
 }

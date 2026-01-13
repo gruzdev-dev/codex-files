@@ -33,9 +33,22 @@ func NewS3Provider(cfg *configs.Config) (ports.FileProvider, error) {
 		return nil, fmt.Errorf("S3 bucket is required")
 	}
 
-	client, err := minio.New(cfg.S3.Endpoint, &minio.Options{
+	endpoint := cfg.S3.Endpoint
+	useSSL := cfg.S3.UseSSL
+
+	if parsedURL, err := url.Parse(cfg.S3.Endpoint); err == nil && parsedURL.Host != "" {
+		endpoint = parsedURL.Host
+		switch parsedURL.Scheme {
+		case "https":
+			useSSL = true
+		case "http":
+			useSSL = false
+		}
+	}
+
+	client, err := minio.New(endpoint, &minio.Options{
 		Creds:  credentials.NewStaticV4(cfg.S3.AccessKey, cfg.S3.SecretKey, ""),
-		Secure: cfg.S3.UseSSL,
+		Secure: useSSL,
 	})
 	if err != nil {
 		return nil, fmt.Errorf("failed to create minio client: %w", err)
