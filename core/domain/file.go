@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -27,9 +28,13 @@ type File struct {
 
 func NewFile(ownerID, contentType string, size int64) *File {
 	now := time.Now()
+	id := uuid.New().String()
+
+	s3Path := fmt.Sprintf("%s/%s", ownerID, id)
 	return &File{
-		ID:          uuid.New().String(),
+		ID:          id,
 		OwnerID:     ownerID,
+		S3Path:      s3Path,
 		ContentType: contentType,
 		Size:        size,
 		Status:      FileStatusPending,
@@ -47,4 +52,13 @@ func (f *File) MarkAsUploaded() {
 func (f *File) MarkAsDeleted() {
 	f.IsDeleted = true
 	f.UpdatedAt = time.Now()
+}
+
+type GetDownloadURLResult struct {
+	DownloadURL string
+}
+
+type GenerateUploadURLResult struct {
+	FileID    string
+	UploadURL string
 }

@@ -34,12 +34,7 @@ func NewFileService(
 	}
 }
 
-type GenerateUploadURLResult struct {
-	FileID    string
-	UploadURL string
-}
-
-func (s *FileService) GenerateUploadURL(ctx context.Context, ownerID, contentType string, size int64) (*GenerateUploadURLResult, error) {
+func (s *FileService) GenerateUploadURL(ctx context.Context, ownerID, contentType string, size int64) (*domain.GenerateUploadURLResult, error) {
 	if ownerID == "" {
 		return nil, fmt.Errorf("%w: owner ID is required", domain.ErrInvalidInput)
 	}
@@ -54,7 +49,6 @@ func (s *FileService) GenerateUploadURL(ctx context.Context, ownerID, contentTyp
 	}
 
 	file := domain.NewFile(ownerID, contentType, size)
-	file.S3Path = fmt.Sprintf("%s/%s", ownerID, file.ID)
 
 	created, err := s.repo.Create(ctx, file)
 	if err != nil {
@@ -72,17 +66,13 @@ func (s *FileService) GenerateUploadURL(ctx context.Context, ownerID, contentTyp
 		return nil, fmt.Errorf("%w: failed to generate upload URL: %v", domain.ErrInternal, err)
 	}
 
-	return &GenerateUploadURLResult{
+	return &domain.GenerateUploadURLResult{
 		FileID:    created.ID,
 		UploadURL: uploadURL,
 	}, nil
 }
 
-type GetDownloadURLResult struct {
-	DownloadURL string
-}
-
-func (s *FileService) GetDownloadURL(ctx context.Context, fileID, userID string, scopes []string) (*GetDownloadURLResult, error) {
+func (s *FileService) GetDownloadURL(ctx context.Context, fileID, userID string, scopes []string) (*domain.GetDownloadURLResult, error) {
 	if fileID == "" {
 		return nil, fmt.Errorf("%w: file ID is required", domain.ErrFileIDRequired)
 	}
@@ -108,7 +98,7 @@ func (s *FileService) GetDownloadURL(ctx context.Context, fileID, userID string,
 		return nil, fmt.Errorf("%w: failed to generate download URL: %v", domain.ErrInternal, err)
 	}
 
-	return &GetDownloadURLResult{
+	return &domain.GetDownloadURLResult{
 		DownloadURL: downloadURL,
 	}, nil
 }
