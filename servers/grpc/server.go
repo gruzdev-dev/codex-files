@@ -30,10 +30,6 @@ func NewServer(cfg *configs.Config, handler *grpcAdapter.FilesHandler) *Server {
 	}
 }
 
-func (s *Server) GetGRPCServer() *grpc.Server {
-	return s.grpcServer
-}
-
 func (s *Server) Start(ctx context.Context) error {
 	addr := fmt.Sprintf(":%s", s.cfg.GRPC.Port)
 	lis, err := net.Listen("tcp", addr)

@@ -18,7 +18,7 @@ func NewFilesHandler(fileService *services.FileService) *FilesHandler {
 	}
 }
 
-func (h *FilesHandler) GenerateUploadUrl(ctx context.Context, req *proto.GenerateUploadUrlRequest) (*proto.GenerateUploadUrlResponse, error) {
+func (h *FilesHandler) GeneratePresignedUrls(ctx context.Context, req *proto.GeneratePresignedUrlsRequest) (*proto.GeneratePresignedUrlsResponse, error) {
 	if req.UserId == "" {
 		return nil, fmt.Errorf("user_id is required")
 	}
@@ -34,9 +34,10 @@ func (h *FilesHandler) GenerateUploadUrl(ctx context.Context, req *proto.Generat
 		return nil, fmt.Errorf("failed to generate upload URL: %w", err)
 	}
 
-	return &proto.GenerateUploadUrlResponse{
-		FileId:    result.FileID,
-		UploadUrl: result.UploadURL,
+	return &proto.GeneratePresignedUrlsResponse{
+		FileId:      result.FileID,
+		UploadUrl:   result.UploadURL,
+		DownloadUrl: result.DownloadURL,
 	}, nil
 }
 

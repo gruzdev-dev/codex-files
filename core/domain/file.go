@@ -59,6 +59,7 @@ type GetDownloadURLResult struct {
 }
 
 type GenerateUploadURLResult struct {
-	FileID    string
-	UploadURL string
+	FileID      string
+	UploadURL   string
+	DownloadURL string
 }

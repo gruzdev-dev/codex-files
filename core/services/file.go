@@ -66,9 +66,12 @@ func (s *FileService) GenerateUploadURL(ctx context.Context, ownerID, contentTyp
 		return nil, fmt.Errorf("%w: failed to generate upload URL: %v", domain.ErrInternal, err)
 	}
 
+	downloadURL := fmt.Sprintf("/files/%s/download", created.ID)
+
 	return &domain.GenerateUploadURLResult{
-		FileID:    created.ID,
-		UploadURL: uploadURL,
+		FileID:      created.ID,
+		UploadURL:   uploadURL,
+		DownloadURL: downloadURL,
 	}, nil
 }
 

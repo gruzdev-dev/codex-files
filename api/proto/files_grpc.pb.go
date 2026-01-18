@@ -19,15 +19,15 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	FilesService_GenerateUploadUrl_FullMethodName = "/proto.FilesService/GenerateUploadUrl"
-	FilesService_DeleteFile_FullMethodName        = "/proto.FilesService/DeleteFile"
+	FilesService_GeneratePresignedUrls_FullMethodName = "/proto.FilesService/GeneratePresignedUrls"
+	FilesService_DeleteFile_FullMethodName            = "/proto.FilesService/DeleteFile"
 )
 
 // FilesServiceClient is the client API for FilesService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type FilesServiceClient interface {
-	GenerateUploadUrl(ctx context.Context, in *GenerateUploadUrlRequest, opts ...grpc.CallOption) (*GenerateUploadUrlResponse, error)
+	GeneratePresignedUrls(ctx context.Context, in *GeneratePresignedUrlsRequest, opts ...grpc.CallOption) (*GeneratePresignedUrlsResponse, error)
 	DeleteFile(ctx context.Context, in *DeleteFileRequest, opts ...grpc.CallOption) (*DeleteFileResponse, error)
 }
 
@@ -39,10 +39,10 @@ func NewFilesServiceClient(cc grpc.ClientConnInterface) FilesServiceClient {
 	return &filesServiceClient{cc}
 }
 
-func (c *filesServiceClient) GenerateUploadUrl(ctx context.Context, in *GenerateUploadUrlRequest, opts ...grpc.CallOption) (*GenerateUploadUrlResponse, error) {
+func (c *filesServiceClient) GeneratePresignedUrls(ctx context.Context, in *GeneratePresignedUrlsRequest, opts ...grpc.CallOption) (*GeneratePresignedUrlsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GenerateUploadUrlResponse)
-	err := c.cc.Invoke(ctx, FilesService_GenerateUploadUrl_FullMethodName, in, out, cOpts...)
+	out := new(GeneratePresignedUrlsResponse)
+	err := c.cc.Invoke(ctx, FilesService_GeneratePresignedUrls_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -63,7 +63,7 @@ func (c *filesServiceClient) DeleteFile(ctx context.Context, in *DeleteFileReque
 // All implementations must embed UnimplementedFilesServiceServer
 // for forward compatibility.
 type FilesServiceServer interface {
-	GenerateUploadUrl(context.Context, *GenerateUploadUrlRequest) (*GenerateUploadUrlResponse, error)
+	GeneratePresignedUrls(context.Context, *GeneratePresignedUrlsRequest) (*GeneratePresignedUrlsResponse, error)
 	DeleteFile(context.Context, *DeleteFileRequest) (*DeleteFileResponse, error)
 	mustEmbedUnimplementedFilesServiceServer()
 }
@@ -75,8 +75,8 @@ type FilesServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedFilesServiceServer struct{}
 
-func (UnimplementedFilesServiceServer) GenerateUploadUrl(context.Context, *GenerateUploadUrlRequest) (*GenerateUploadUrlResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GenerateUploadUrl not implemented")
+func (UnimplementedFilesServiceServer) GeneratePresignedUrls(context.Context, *GeneratePresignedUrlsRequest) (*GeneratePresignedUrlsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GeneratePresignedUrls not implemented")
 }
 func (UnimplementedFilesServiceServer) DeleteFile(context.Context, *DeleteFileRequest) (*DeleteFileResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteFile not implemented")
@@ -102,20 +102,20 @@ func RegisterFilesServiceServer(s grpc.ServiceRegistrar, srv FilesServiceServer)
 	s.RegisterService(&FilesService_ServiceDesc, srv)
 }
 
-func _FilesService_GenerateUploadUrl_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GenerateUploadUrlRequest)
+func _FilesService_GeneratePresignedUrls_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GeneratePresignedUrlsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FilesServiceServer).GenerateUploadUrl(ctx, in)
+		return srv.(FilesServiceServer).GeneratePresignedUrls(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: FilesService_GenerateUploadUrl_FullMethodName,
+		FullMethod: FilesService_GeneratePresignedUrls_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FilesServiceServer).GenerateUploadUrl(ctx, req.(*GenerateUploadUrlRequest))
+		return srv.(FilesServiceServer).GeneratePresignedUrls(ctx, req.(*GeneratePresignedUrlsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -146,8 +146,8 @@ var FilesService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*FilesServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GenerateUploadUrl",
-			Handler:    _FilesService_GenerateUploadUrl_Handler,
+			MethodName: "GeneratePresignedUrls",
+			Handler:    _FilesService_GeneratePresignedUrls_Handler,
 		},
 		{
 			MethodName: "DeleteFile",

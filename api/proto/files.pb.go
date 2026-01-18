@@ -21,7 +21,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type GenerateUploadUrlRequest struct {
+type GeneratePresignedUrlsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	ContentType   string                 `protobuf:"bytes,2,opt,name=content_type,json=contentType,proto3" json:"content_type,omitempty"`
@@ -30,20 +30,20 @@ type GenerateUploadUrlRequest struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GenerateUploadUrlRequest) Reset() {
-	*x = GenerateUploadUrlRequest{}
+func (x *GeneratePresignedUrlsRequest) Reset() {
+	*x = GeneratePresignedUrlsRequest{}
 	mi := &file_api_proto_files_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GenerateUploadUrlRequest) String() string {
+func (x *GeneratePresignedUrlsRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GenerateUploadUrlRequest) ProtoMessage() {}
+func (*GeneratePresignedUrlsRequest) ProtoMessage() {}
 
-func (x *GenerateUploadUrlRequest) ProtoReflect() protoreflect.Message {
+func (x *GeneratePresignedUrlsRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_api_proto_files_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -55,54 +55,55 @@ func (x *GenerateUploadUrlRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GenerateUploadUrlRequest.ProtoReflect.Descriptor instead.
-func (*GenerateUploadUrlRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use GeneratePresignedUrlsRequest.ProtoReflect.Descriptor instead.
+func (*GeneratePresignedUrlsRequest) Descriptor() ([]byte, []int) {
 	return file_api_proto_files_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *GenerateUploadUrlRequest) GetUserId() string {
+func (x *GeneratePresignedUrlsRequest) GetUserId() string {
 	if x != nil {
 		return x.UserId
 	}
 	return ""
 }
 
-func (x *GenerateUploadUrlRequest) GetContentType() string {
+func (x *GeneratePresignedUrlsRequest) GetContentType() string {
 	if x != nil {
 		return x.ContentType
 	}
 	return ""
 }
 
-func (x *GenerateUploadUrlRequest) GetSize() int64 {
+func (x *GeneratePresignedUrlsRequest) GetSize() int64 {
 	if x != nil {
 		return x.Size
 	}
 	return 0
 }
 
-type GenerateUploadUrlResponse struct {
+type GeneratePresignedUrlsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	FileId        string                 `protobuf:"bytes,1,opt,name=file_id,json=fileId,proto3" json:"file_id,omitempty"`
 	UploadUrl     string                 `protobuf:"bytes,2,opt,name=upload_url,json=uploadUrl,proto3" json:"upload_url,omitempty"`
+	DownloadUrl   string                 `protobuf:"bytes,3,opt,name=download_url,json=downloadUrl,proto3" json:"download_url,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GenerateUploadUrlResponse) Reset() {
-	*x = GenerateUploadUrlResponse{}
+func (x *GeneratePresignedUrlsResponse) Reset() {
+	*x = GeneratePresignedUrlsResponse{}
 	mi := &file_api_proto_files_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GenerateUploadUrlResponse) String() string {
+func (x *GeneratePresignedUrlsResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GenerateUploadUrlResponse) ProtoMessage() {}
+func (*GeneratePresignedUrlsResponse) ProtoMessage() {}
 
-func (x *GenerateUploadUrlResponse) ProtoReflect() protoreflect.Message {
+func (x *GeneratePresignedUrlsResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_api_proto_files_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -114,21 +115,28 @@ func (x *GenerateUploadUrlResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GenerateUploadUrlResponse.ProtoReflect.Descriptor instead.
-func (*GenerateUploadUrlResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use GeneratePresignedUrlsResponse.ProtoReflect.Descriptor instead.
+func (*GeneratePresignedUrlsResponse) Descriptor() ([]byte, []int) {
 	return file_api_proto_files_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *GenerateUploadUrlResponse) GetFileId() string {
+func (x *GeneratePresignedUrlsResponse) GetFileId() string {
 	if x != nil {
 		return x.FileId
 	}
 	return ""
 }
 
-func (x *GenerateUploadUrlResponse) GetUploadUrl() string {
+func (x *GeneratePresignedUrlsResponse) GetUploadUrl() string {
 	if x != nil {
 		return x.UploadUrl
+	}
+	return ""
+}
+
+func (x *GeneratePresignedUrlsResponse) GetDownloadUrl() string {
+	if x != nil {
+		return x.DownloadUrl
 	}
 	return ""
 }
@@ -217,20 +225,21 @@ var File_api_proto_files_proto protoreflect.FileDescriptor
 
 const file_api_proto_files_proto_rawDesc = "" +
 	"\n" +
-	"\x15api/proto/files.proto\x12\x05proto\"j\n" +
-	"\x18GenerateUploadUrlRequest\x12\x17\n" +
+	"\x15api/proto/files.proto\x12\x05proto\"n\n" +
+	"\x1cGeneratePresignedUrlsRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12!\n" +
 	"\fcontent_type\x18\x02 \x01(\tR\vcontentType\x12\x12\n" +
-	"\x04size\x18\x03 \x01(\x03R\x04size\"S\n" +
-	"\x19GenerateUploadUrlResponse\x12\x17\n" +
+	"\x04size\x18\x03 \x01(\x03R\x04size\"z\n" +
+	"\x1dGeneratePresignedUrlsResponse\x12\x17\n" +
 	"\afile_id\x18\x01 \x01(\tR\x06fileId\x12\x1d\n" +
 	"\n" +
-	"upload_url\x18\x02 \x01(\tR\tuploadUrl\",\n" +
+	"upload_url\x18\x02 \x01(\tR\tuploadUrl\x12!\n" +
+	"\fdownload_url\x18\x03 \x01(\tR\vdownloadUrl\",\n" +
 	"\x11DeleteFileRequest\x12\x17\n" +
 	"\afile_id\x18\x01 \x01(\tR\x06fileId\"\x14\n" +
-	"\x12DeleteFileResponse2\xa9\x01\n" +
-	"\fFilesService\x12V\n" +
-	"\x11GenerateUploadUrl\x12\x1f.proto.GenerateUploadUrlRequest\x1a .proto.GenerateUploadUrlResponse\x12A\n" +
+	"\x12DeleteFileResponse2\xb5\x01\n" +
+	"\fFilesService\x12b\n" +
+	"\x15GeneratePresignedUrls\x12#.proto.GeneratePresignedUrlsRequest\x1a$.proto.GeneratePresignedUrlsResponse\x12A\n" +
 	"\n" +
 	"DeleteFile\x12\x18.proto.DeleteFileRequest\x1a\x19.proto.DeleteFileResponseB\x17Z\x15codex-files/api/protob\x06proto3"
 
@@ -248,15 +257,15 @@ func file_api_proto_files_proto_rawDescGZIP() []byte {
 
 var file_api_proto_files_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_api_proto_files_proto_goTypes = []any{
-	(*GenerateUploadUrlRequest)(nil),  // 0: proto.GenerateUploadUrlRequest
-	(*GenerateUploadUrlResponse)(nil), // 1: proto.GenerateUploadUrlResponse
-	(*DeleteFileRequest)(nil),         // 2: proto.DeleteFileRequest
-	(*DeleteFileResponse)(nil),        // 3: proto.DeleteFileResponse
+	(*GeneratePresignedUrlsRequest)(nil),  // 0: proto.GeneratePresignedUrlsRequest
+	(*GeneratePresignedUrlsResponse)(nil), // 1: proto.GeneratePresignedUrlsResponse
+	(*DeleteFileRequest)(nil),             // 2: proto.DeleteFileRequest
+	(*DeleteFileResponse)(nil),            // 3: proto.DeleteFileResponse
 }
 var file_api_proto_files_proto_depIdxs = []int32{
-	0, // 0: proto.FilesService.GenerateUploadUrl:input_type -> proto.GenerateUploadUrlRequest
+	0, // 0: proto.FilesService.GeneratePresignedUrls:input_type -> proto.GeneratePresignedUrlsRequest
 	2, // 1: proto.FilesService.DeleteFile:input_type -> proto.DeleteFileRequest
-	1, // 2: proto.FilesService.GenerateUploadUrl:output_type -> proto.GenerateUploadUrlResponse
+	1, // 2: proto.FilesService.GeneratePresignedUrls:output_type -> proto.GeneratePresignedUrlsResponse
 	3, // 3: proto.FilesService.DeleteFile:output_type -> proto.DeleteFileResponse
 	2, // [2:4] is the sub-list for method output_type
 	0, // [0:2] is the sub-list for method input_type

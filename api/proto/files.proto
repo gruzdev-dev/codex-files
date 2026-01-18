@@ -5,19 +5,20 @@ package proto;
 option go_package = "codex-files/api/proto";
 
 service FilesService {
-  rpc GenerateUploadUrl(GenerateUploadUrlRequest) returns (GenerateUploadUrlResponse);
+  rpc GeneratePresignedUrls(GeneratePresignedUrlsRequest) returns (GeneratePresignedUrlsResponse);
   rpc DeleteFile(DeleteFileRequest) returns (DeleteFileResponse);
 }
 
-message GenerateUploadUrlRequest {
+message GeneratePresignedUrlsRequest {
   string user_id = 1;
   string content_type = 2;
   int64 size = 3;
 }
 
-message GenerateUploadUrlResponse {
+message GeneratePresignedUrlsResponse {
   string file_id = 1;
   string upload_url = 2;
+  string download_url = 3;
 }
 
 message DeleteFileRequest {
