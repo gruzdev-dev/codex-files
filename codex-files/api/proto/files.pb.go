@@ -233,7 +233,7 @@ const file_api_proto_files_proto_rawDesc = "" +
 	"\fFilesService\x12V\n" +
 	"\x11GenerateUploadUrl\x12\x1f.proto.GenerateUploadUrlRequest\x1a .proto.GenerateUploadUrlResponse\x12A\n" +
 	"\n" +
-	"DeleteFile\x12\x18.proto.DeleteFileRequest\x1a\x19.proto.DeleteFileResponseB\x17Z\x15codex-files/protob\x06proto3"
+	"DeleteFile\x12\x18.proto.DeleteFileRequest\x1a\x19.proto.DeleteFileResponseB\x17Z\x15github.com/gruzdev-dev/codex-files/protob\x06proto3"
 
 var (
 	file_api_proto_files_proto_rawDescOnce sync.Once

@@ -1,9 +1,6 @@
 package http
 
 import (
-	httpAdapter "codex-files/adapters/http"
-	"codex-files/configs"
-	middleware "codex-files/middleware/http"
 	"context"
 	"fmt"
 	"log"
@@ -12,6 +9,10 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+
+	httpAdapter "github.com/gruzdev-dev/codex-files/adapters/http"
+	"github.com/gruzdev-dev/codex-files/configs"
+	middleware "github.com/gruzdev-dev/codex-files/middleware/http"
 
 	"github.com/gorilla/mux"
 )

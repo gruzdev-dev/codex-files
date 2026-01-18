@@ -1,9 +1,10 @@
 package ports
 
 import (
-	"codex-files/core/domain"
 	"context"
 	"time"
+
+	"github.com/gruzdev-dev/codex-files/core/domain"
 )
 
 //go:generate mockgen -source=file.go -destination=file_mocks.go -package=ports FileRepository,FileProvider

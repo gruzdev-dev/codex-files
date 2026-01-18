@@ -11,8 +11,8 @@ import (
 	"testing"
 	"time"
 
-	"codex-files/core/domain"
-	"codex-files/proto"
+	"github.com/gruzdev-dev/codex-files/core/domain"
+	"github.com/gruzdev-dev/codex-files/proto"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/jackc/pgx/v5/pgxpool"

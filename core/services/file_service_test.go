@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"codex-files/core/domain"
-	"codex-files/core/ports"
+	"github.com/gruzdev-dev/codex-files/core/domain"
+	"github.com/gruzdev-dev/codex-files/core/ports"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

@@ -2,13 +2,14 @@ package main
 
 import (
 	"context"
-	"golang.org/x/sync/errgroup"
 	"log"
 	"os/signal"
 	"syscall"
 
-	grpcServer "codex-files/servers/grpc"
-	httpServer "codex-files/servers/http"
+	"golang.org/x/sync/errgroup"
+
+	grpcServer "github.com/gruzdev-dev/codex-files/servers/grpc"
+	httpServer "github.com/gruzdev-dev/codex-files/servers/http"
 )
 
 func main() {

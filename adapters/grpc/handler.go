@@ -1,10 +1,11 @@
 package grpc
 
 import (
-	"codex-files/core/services"
-	"codex-files/proto"
 	"context"
 	"fmt"
+
+	"github.com/gruzdev-dev/codex-files/core/services"
+	"github.com/gruzdev-dev/codex-files/proto"
 )
 
 type FilesHandler struct {

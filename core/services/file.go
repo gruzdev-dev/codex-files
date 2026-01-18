@@ -1,13 +1,14 @@
 package services
 
 import (
-	"codex-files/core/domain"
-	"codex-files/core/ports"
 	"context"
 	"fmt"
 	"log"
 	"slices"
 	"time"
+
+	"github.com/gruzdev-dev/codex-files/core/domain"
+	"github.com/gruzdev-dev/codex-files/core/ports"
 )
 
 type FileService struct {

@@ -1,13 +1,14 @@
 package s3
 
 import (
-	"codex-files/configs"
-	"codex-files/core/ports"
 	"context"
 	"fmt"
 	"net/http"
 	"net/url"
 	"time"
+
+	"github.com/gruzdev-dev/codex-files/configs"
+	"github.com/gruzdev-dev/codex-files/core/ports"
 
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"

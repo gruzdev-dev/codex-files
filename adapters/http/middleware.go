@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"strings"
 
-	"codex-files/core/domain"
-	"codex-files/pkg/identity"
+	"github.com/gruzdev-dev/codex-files/core/domain"
+	"github.com/gruzdev-dev/codex-files/pkg/identity"
 
 	"github.com/golang-jwt/jwt/v5"
 )

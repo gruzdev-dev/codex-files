@@ -1,15 +1,16 @@
 package http
 
 import (
-	"codex-files/configs"
-	"codex-files/core/domain"
-	"codex-files/core/services"
-	"codex-files/pkg/identity"
 	"encoding/json"
 	"log"
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/gruzdev-dev/codex-files/configs"
+	"github.com/gruzdev-dev/codex-files/core/domain"
+	"github.com/gruzdev-dev/codex-files/core/services"
+	"github.com/gruzdev-dev/codex-files/pkg/identity"
 
 	"github.com/gorilla/mux"
 	"github.com/minio/minio-go/v7/pkg/notification"

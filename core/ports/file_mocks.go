@@ -10,10 +10,11 @@
 package ports
 
 import (
-	domain "codex-files/core/domain"
 	context "context"
 	reflect "reflect"
 	time "time"
+
+	domain "github.com/gruzdev-dev/codex-files/core/domain"
 
 	gomock "go.uber.org/mock/gomock"
 )

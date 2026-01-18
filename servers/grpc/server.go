@@ -1,12 +1,13 @@
 package grpc
 
 import (
-	grpcAdapter "codex-files/adapters/grpc"
-	"codex-files/configs"
-	"codex-files/proto"
 	"context"
 	"fmt"
 	"net"
+
+	grpcAdapter "github.com/gruzdev-dev/codex-files/adapters/grpc"
+	"github.com/gruzdev-dev/codex-files/configs"
+	"github.com/gruzdev-dev/codex-files/proto"
 
 	"google.golang.org/grpc"
 )

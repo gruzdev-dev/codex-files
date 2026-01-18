@@ -1,10 +1,11 @@
 package postgres
 
 import (
-	"codex-files/core/domain"
-	"codex-files/core/ports"
 	"context"
 	"time"
+
+	"github.com/gruzdev-dev/codex-files/core/domain"
+	"github.com/gruzdev-dev/codex-files/core/ports"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
