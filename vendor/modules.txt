@@ -117,7 +117,7 @@ github.com/google/uuid
 github.com/gorilla/mux
 # github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.4
 ## explicit; go 1.24.0
-# github.com/gruzdev-dev/codex-files/proto v0.0.0-00010101000000-000000000000 => ./proto
+# github.com/gruzdev-dev/codex-files/proto v0.0.0 => ./proto
 ## explicit; go 1.25.5
 github.com/gruzdev-dev/codex-files/proto
 # github.com/jackc/pgerrcode v0.0.0-20220416144525-469b46aa5efa
