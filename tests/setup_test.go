@@ -14,11 +14,11 @@ import (
 	grpcAdapter "codex-files/adapters/grpc"
 	httpAdapter "codex-files/adapters/http"
 	postgresAdapter "codex-files/adapters/storage/postgres"
-	"codex-files/api/proto"
 	"codex-files/configs"
 	"codex-files/core/ports"
 	"codex-files/core/services"
 	"codex-files/migrations"
+	"codex-files/proto"
 	grpcServer "codex-files/servers/grpc"
 
 	"github.com/gorilla/mux"

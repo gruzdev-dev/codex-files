@@ -2,8 +2,8 @@ package grpc
 
 import (
 	grpcAdapter "codex-files/adapters/grpc"
-	"codex-files/api/proto"
 	"codex-files/configs"
+	"codex-files/proto"
 	"context"
 	"fmt"
 	"net"

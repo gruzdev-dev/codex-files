@@ -7,11 +7,12 @@
 package proto
 
 import (
-	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
+
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 )
 
 const (
@@ -241,7 +242,7 @@ const file_api_proto_files_proto_rawDesc = "" +
 	"\fFilesService\x12b\n" +
 	"\x15GeneratePresignedUrls\x12#.proto.GeneratePresignedUrlsRequest\x1a$.proto.GeneratePresignedUrlsResponse\x12A\n" +
 	"\n" +
-	"DeleteFile\x12\x18.proto.DeleteFileRequest\x1a\x19.proto.DeleteFileResponseB\x17Z\x15codex-files/api/protob\x06proto3"
+	"DeleteFile\x12\x18.proto.DeleteFileRequest\x1a\x19.proto.DeleteFileResponseB\x17Z\x15codex-files/protob\x06proto3"
 
 var (
 	file_api_proto_files_proto_rawDescOnce sync.Once

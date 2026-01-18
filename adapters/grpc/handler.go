@@ -1,8 +1,8 @@
 package grpc
 
 import (
-	"codex-files/api/proto"
 	"codex-files/core/services"
+	"codex-files/proto"
 	"context"
 	"fmt"
 )

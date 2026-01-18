@@ -11,8 +11,8 @@ import (
 	"testing"
 	"time"
 
-	"codex-files/api/proto"
 	"codex-files/core/domain"
+	"codex-files/proto"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -26,7 +26,7 @@ const (
 	testUserID      = "test-user-123"
 	testContentType = "application/pdf"
 	testFileSize    = int64(1024 * 1024) // 1MB
-	s3Basic = "http://s3.test.local/test-bucket/"
+	s3Basic         = "http://s3.test.local/test-bucket/"
 )
 
 func createTestJWTToken(secret string, userID string, scopes []string) (string, error) {
