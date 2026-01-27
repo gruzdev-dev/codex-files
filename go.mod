@@ -2,6 +2,8 @@ module github.com/gruzdev-dev/codex-files
 
 go 1.25.5
 
+replace github.com/gruzdev-dev/codex-files/proto => ./proto
+
 require (
 	github.com/golang-jwt/jwt/v5 v5.3.0
 	github.com/golang-migrate/migrate/v4 v4.19.1
@@ -18,8 +20,6 @@ require (
 	golang.org/x/sync v0.19.0
 	google.golang.org/grpc v1.78.0
 )
-
-replace github.com/gruzdev-dev/codex-files/proto => ./proto
 
 require (
 	dario.cat/mergo v1.0.2 // indirect
