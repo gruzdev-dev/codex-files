@@ -5,6 +5,7 @@ WORKDIR /app
 RUN apk add --no-cache git
 
 COPY go.mod go.sum ./
+COPY proto/go.mod proto/go.sum ./proto/
 RUN go mod download
 
 COPY . .
