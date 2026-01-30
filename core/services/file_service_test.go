@@ -8,6 +8,7 @@ import (
 
 	"github.com/gruzdev-dev/codex-files/core/domain"
 	"github.com/gruzdev-dev/codex-files/core/ports"
+	"github.com/gruzdev-dev/codex-files/pkg/identity"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -291,7 +292,7 @@ func TestFileService_GetDownloadURL(t *testing.T) {
 			name:   "success path - scope access",
 			fileID: testFileID,
 			userID: testUserID,
-			scopes: []string{"file:" + testFileID + ":read"},
+			scopes: []string{"files:file:" + testFileID + ":read"},
 			setupMocks: func(repo *ports.MockFileRepository, provider *ports.MockFileProvider) {
 				file := &domain.File{
 					ID:          testFileID,
@@ -369,7 +370,7 @@ func TestFileService_GetDownloadURL(t *testing.T) {
 			},
 		},
 		{
-			name:   "access denied - not owner and no scope",
+			name:   "access denied - not owner and no scopes",
 			fileID: testFileID,
 			userID: testUserID,
 			scopes: []string{},
@@ -398,7 +399,7 @@ func TestFileService_GetDownloadURL(t *testing.T) {
 			name:   "access denied - wrong scope",
 			fileID: testFileID,
 			userID: testUserID,
-			scopes: []string{"file:other-file-id:read"},
+			scopes: []string{"files:file:other-file-id:read"},
 			setupMocks: func(repo *ports.MockFileRepository, provider *ports.MockFileProvider) {
 				file := &domain.File{
 					ID:          testFileID,
@@ -474,12 +475,11 @@ func TestFileService_GetDownloadURL(t *testing.T) {
 				15*time.Minute,
 			)
 
-			result, err := service.GetDownloadURL(
-				context.Background(),
-				tt.fileID,
-				tt.userID,
-				tt.scopes,
-			)
+			ctx := identity.WithCtx(context.Background(), domain.Identity{
+				UserID: tt.userID,
+				Scopes: tt.scopes,
+			})
+			result, err := service.GetDownloadURL(ctx, tt.fileID)
 
 			if tt.expectedError != nil {
 				assert.Error(t, err)

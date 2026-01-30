@@ -37,7 +37,10 @@ func NewS3Provider(cfg *configs.Config) (ports.FileProvider, error) {
 	endpoint := cfg.S3.Endpoint
 	useSSL := cfg.S3.UseSSL
 
-	if parsedURL, err := url.Parse(cfg.S3.Endpoint); err == nil && parsedURL.Host != "" {
+	if cfg.S3.ExternalHost != "" {
+		endpoint = cfg.S3.ExternalHost
+		useSSL = false
+	} else if parsedURL, err := url.Parse(cfg.S3.Endpoint); err == nil && parsedURL.Host != "" {
 		endpoint = parsedURL.Host
 		switch parsedURL.Scheme {
 		case "https":

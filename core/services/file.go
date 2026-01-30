@@ -9,6 +9,8 @@ import (
 
 	"github.com/gruzdev-dev/codex-files/core/domain"
 	"github.com/gruzdev-dev/codex-files/core/ports"
+
+	"github.com/gruzdev-dev/codex-files/pkg/identity"
 )
 
 type FileService struct {
@@ -76,7 +78,7 @@ func (s *FileService) GenerateUploadURL(ctx context.Context, ownerID, contentTyp
 	}, nil
 }
 
-func (s *FileService) GetDownloadURL(ctx context.Context, fileID, userID string, scopes []string) (*domain.GetDownloadURLResult, error) {
+func (s *FileService) GetDownloadURL(ctx context.Context, fileID string) (*domain.GetDownloadURLResult, error) {
 	if fileID == "" {
 		return nil, fmt.Errorf("%w: file ID is required", domain.ErrFileIDRequired)
 	}
@@ -89,7 +91,12 @@ func (s *FileService) GetDownloadURL(ctx context.Context, fileID, userID string,
 		return nil, fmt.Errorf("%w: failed to get file: %v", domain.ErrInternal, err)
 	}
 
-	if !s.hasAccess(file, userID, scopes) {
+	user, ok := identity.FromCtx(ctx)
+	if !ok {
+		return nil, domain.ErrAccessDenied
+	}
+
+	if !s.hasAccess(file, user.UserID, user.Scopes) {
 		return nil, domain.ErrAccessDenied
 	}
 
@@ -128,7 +135,7 @@ func (s *FileService) hasAccess(file *domain.File, userID string, scopes []strin
 		return true
 	}
 
-	requiredScope := fmt.Sprintf("file:%s:read", file.ID)
+	requiredScope := fmt.Sprintf("files:file:%s:read", file.ID)
 	return slices.Contains(scopes, requiredScope)
 }
 

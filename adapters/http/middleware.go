@@ -44,7 +44,7 @@ func (m *AuthMiddleware) Handler(next http.Handler) http.Handler {
 
 		id := domain.Identity{
 			UserID: getClaim(claims, "sub"),
-			Scopes: parseScopes(claims["scope"]),
+			Scopes: parseScopes(claims["scopes"]),
 		}
 
 		ctx := identity.WithCtx(r.Context(), id)
@@ -57,11 +57,11 @@ func getClaim(claims jwt.MapClaims, key string) string {
 	return val
 }
 
-func parseScopes(raw interface{}) []string {
+func parseScopes(raw any) []string {
 	if s, ok := raw.(string); ok {
 		return strings.Split(s, " ")
 	}
-	if slice, ok := raw.([]interface{}); ok {
+	if slice, ok := raw.([]any); ok {
 		res := make([]string, len(slice))
 		for i, v := range slice {
 			res[i], _ = v.(string)

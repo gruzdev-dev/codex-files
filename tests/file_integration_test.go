@@ -32,7 +32,7 @@ const (
 func createTestJWTToken(secret string, userID string, scopes []string) (string, error) {
 	claims := jwt.MapClaims{
 		"sub":   userID,
-		"scope": strings.Join(scopes, " "),
+		"scopes": strings.Join(scopes, " "),
 		"exp":   time.Now().Add(time.Hour).Unix(),
 		"iat":   time.Now().Unix(),
 	}

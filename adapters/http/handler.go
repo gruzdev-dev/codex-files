@@ -10,7 +10,6 @@ import (
 	"github.com/gruzdev-dev/codex-files/configs"
 	"github.com/gruzdev-dev/codex-files/core/domain"
 	"github.com/gruzdev-dev/codex-files/core/services"
-	"github.com/gruzdev-dev/codex-files/pkg/identity"
 
 	"github.com/gorilla/mux"
 	"github.com/minio/minio-go/v7/pkg/notification"
@@ -46,13 +45,7 @@ func (h *Handler) GetDownloadURL(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, ok := identity.FromCtx(r.Context())
-	if !ok {
-		http.Error(w, "unauthorized", http.StatusUnauthorized)
-		return
-	}
-
-	result, err := h.fileService.GetDownloadURL(r.Context(), fileID, user.UserID, user.Scopes)
+	result, err := h.fileService.GetDownloadURL(r.Context(), fileID)
 	if err != nil {
 		if err == domain.ErrFileNotFound || err == domain.ErrFileIDRequired {
 			http.Error(w, err.Error(), http.StatusNotFound)
